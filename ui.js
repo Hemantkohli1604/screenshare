@@ -1,3 +1,5 @@
+"use strict";
+"use warnings";
 var fxn = require('./view.js');
 var room = require('./room.js');
 var share = require('./share.js');
@@ -39,14 +41,14 @@ $('.submit').on('click', (event) => {
   if (!formEl.form('is valid')) {
     return false;
   }
-  username = $('#username').val();
+  const username = $('#username').val();
   const roomName = $('#roomName').val().toLowerCase();
   if (event.target.id === 'create-btn') {
    room.data.createRoom(roomName);
     $('button#sharescreen').show();
   } else {
     room.data.getMedia(roomName);
-    $('button#sharefinal').show();
+    $('button#joinsession').show();
   }
   return false;
 });
@@ -58,5 +60,5 @@ document.getElementById('sharefinal').addEventListener('click', function(e) {
 document.getElementById('joinsession').addEventListener('click', function(e) {
   console.log('>>>>>> creating peer connection');
     peer.data.createPeerConnection();
-    isStarted = true;
+    var isStarted = true;
 });

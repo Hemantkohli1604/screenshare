@@ -1,3 +1,5 @@
+"use strict";
+"use warnings";
 const electron = require('electron')
 const {remote} = electron
 const ipc = electron.ipcRenderer
@@ -26,7 +28,7 @@ var methods = {};
       }
     }
     
-    methods.handleIceCandidate = function(event) {
+    function handleIceCandidate(event) {
       console.log('icecandidate event: ', event);
       if (event.candidate) {
         room.data.sendMessage({
@@ -40,7 +42,7 @@ var methods = {};
       }
     }
     
-    methods.handleCreateOfferError = function(event) {
+    function handleCreateOfferError(event) {
       console.log('createOffer() error: ', event);
     }
     
@@ -96,13 +98,13 @@ var methods = {};
       }
     }
     
-    methods.handleRemoteStreamAdded = function(event) {
+    function handleRemoteStreamAdded(event) {
       console.log('Remote stream added.');
       remoteStream = event.stream;
       remoteVideo.srcObject = remoteStream;
     }
     
-    methods.handleRemoteStreamRemoved = function(event) {
+    function handleRemoteStreamRemoved(event) {
       console.log('Remote stream removed. Event: ', event);
     }
     

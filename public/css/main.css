@@ -39,10 +39,11 @@ body {
     -webkit-flex-direction: column;
   }
   video {
-    width: 768;
-    height: 515;
-    background: rgba(70, 83, 95, 0.329);
+    width: 100%;
+    height: auto;
+    background: rgba(122, 171, 216, 0.329);
   }
+  
   button {
     display: inline-block;
     background: -webkit-linear-gradient(#F9F9F9 40%, #E3E3E3 70%);
@@ -69,12 +70,12 @@ body {
     background: -webkit-linear-gradient(#E3E3E3 40%, #F9F9F9 70%);
     background: linear-gradient(#E3E3E3 40%, #F9F9F9 70%);
   }
-
+/*
   video {
     background: white url(desktop.png) center no-repeat;
     border: 1px solid #e2e2e2;
     box-shadow: 0 1px 1px rgba(0,0,0,0.2);
   }
-
+*/
   html { margin-top: 20px; }
     #chat-content { height: 180px;  overflow-y: scroll; }

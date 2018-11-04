@@ -1,3 +1,5 @@
+"use strict";
+"use warnings";
 const electron = require('electron');
 var fxn = require('./view.js');
 var room = require('./room.js');

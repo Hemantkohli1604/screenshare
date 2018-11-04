@@ -1,3 +1,5 @@
+"use strict";
+"use warnings";
 const electron = require('electron')
 const {remote} = electron
 const ipc = electron.ipcRenderer
@@ -9,7 +11,7 @@ var localStream;
 var pc;
 var remoteStream;
 
-var socket = io.connect('http://172.16.2.133:8080');
+var socket = io.connect('http://localhost:8080');
 
 let desktopSharing;
 var methods = {}; 
@@ -19,8 +21,7 @@ var methods = {};
   methods.getMedia(room,isInitiator)
   }
 
-
-    methods.getMedia = function(room,isInitiator){
+  methods.getMedia = function(room,isInitiator){
     if (room !== '') {
     socket.emit('create or join', room);
     console.log('Attempted to create or  join room', room);

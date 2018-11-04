@@ -1,3 +1,5 @@
+"use strict";
+"use warnings";
 const electron = require('electron')
 const {remote} = electron
 const ipc = electron.ipcRenderer
@@ -25,7 +27,7 @@ const mainMenuTemplate = [{label:'Electron',
 const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 Menu.setApplicationMenu(mainMenu);
 
-var socket = io.connect('http://172.16.2.133:8080');
+var socket = io.connect('http://localhost:8080');
 
 var pcConfig = {
   'iceServers': [{
@@ -38,6 +40,7 @@ var sdpConstraints = {
   offerToReceiveAudio: true,
   offerToReceiveVideo: true
 };
+
 
 socket.on('message', function(message) {
   console.log('Client received message:', message);

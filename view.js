@@ -1,3 +1,5 @@
+"use strict";
+"use warnings";
 const electron = require('electron')
 const {remote} = electron
 const ipc = electron.ipcRenderer
@@ -10,7 +12,6 @@ var methods = {};
     };
   
     methods.refresh = function() {
-    console.log("working")
     $('select').imagepicker({
       hide_select : true
     });
