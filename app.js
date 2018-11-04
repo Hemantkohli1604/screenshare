@@ -3,6 +3,9 @@ const {remote} = electron
 const ipc = electron.ipcRenderer
 const {Menu}  = remote.require('electron')
 const {desktopCapturer}  = require('electron')
+var peer = require('./peer.js')
+var share = require('./share.js')
+var room = require('./room.js')
 var isChannelReady = false;
 var isInitiator = false;
 var isStarted = false;
@@ -39,13 +42,13 @@ var sdpConstraints = {
 socket.on('message', function(message) {
   console.log('Client received message:', message);
   if (message === 'got user media') {
-    maybeStart();
+    share.data.maybeStart();
   } else if (message.type === 'offer') {
     if (!isInitiator && !isStarted) {
-      maybeStart();
+      share.data.maybeStart();
     }
     pc.setRemoteDescription(new RTCSessionDescription(message));
-    doAnswer();
+    peer.data.doAnswer();
   } else if (message.type === 'answer' && isStarted) {
     pc.setRemoteDescription(new RTCSessionDescription(message));
   } else if (message.type === 'candidate' && isStarted) {
@@ -55,6 +58,13 @@ socket.on('message', function(message) {
     });
     pc.addIceCandidate(candidate);
   } else if (message === 'bye' && isStarted) {
-    handleRemoteHangup();
+    peer.data.handleRemoteHangup();
   }
   });
+
+ // var localVideo = document.querySelector('#local-video');
+ // var remoteVideo = document.querySelector('#remote-video');
+
+  window.onbeforeunload = function() {
+    room.data.sendMessage('bye');
+  };

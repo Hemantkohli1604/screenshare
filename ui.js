@@ -1,5 +1,7 @@
-var fxn = require('./function.js');
-var room = require('./room.js')
+var fxn = require('./view.js');
+var room = require('./room.js');
+var share = require('./share.js');
+var peer = require('./peer.js');
 const {desktopCapturer}  = require('electron')
 
 $(document).ready(function (e) {
@@ -43,8 +45,18 @@ $('.submit').on('click', (event) => {
    room.data.createRoom(roomName);
     $('button#sharescreen').show();
   } else {
-    //getMedia(roomName);
+    room.data.getMedia(roomName);
     $('button#sharefinal').show();
   }
   return false;
+});
+
+document.getElementById('sharefinal').addEventListener('click', function(e) {
+  share.data.toggle(); 
+});
+
+document.getElementById('joinsession').addEventListener('click', function(e) {
+  console.log('>>>>>> creating peer connection');
+    peer.data.createPeerConnection();
+    isStarted = true;
 });

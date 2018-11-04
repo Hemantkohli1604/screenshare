@@ -13,10 +13,11 @@ var socket = io.connect('http://172.16.2.133:8080');
 
 let desktopSharing;
 var methods = {}; 
-    methods.createRoom = function(room){
-    isInitiator = true;
-    methods.getMedia(room,isInitiator)
-    }
+  methods.createRoom = function(room){
+    console.log("room")
+  isInitiator = true;
+  methods.getMedia(room,isInitiator)
+  }
 
 
     methods.getMedia = function(room,isInitiator){
@@ -57,4 +58,4 @@ var methods = {};
     socket.emit('message', message);
     }
 
-      exports.data = methods;
+  exports.data = methods;
