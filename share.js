@@ -7,14 +7,10 @@ var peer = require('./peer.js');
 const {remote} = electron
 const ipc = electron.ipcRenderer
 const {desktopCapturer}  = require('electron')
-var isChannelReady = false;
-var isInitiator = false;
-var isStarted = false;
 var localStream;
 var pc;
 var remoteStream;
 
-var socket = io.connect('http://172.16.2.133:8080');
 
 let desktopSharing;
 var methods = {}; 
@@ -22,7 +18,7 @@ var methods = {};
     methods.toggle = function(){
       if (!desktopSharing) {
         var id = ($('select').val()).replace(/window|screen/g, function(match) { return match + ":"; });
-        methods.onAccessApproved(id);
+        onAccessApproved(id);
       } else {
         desktopSharing = false;
     
@@ -38,7 +34,7 @@ var methods = {};
       }
       }
     
-      methods.onAccessApproved = function(desktop_id) {
+      function onAccessApproved(desktop_id) {
         if (!desktop_id) {
           console.log('Desktop Capture access rejected.');
           return;
@@ -68,10 +64,13 @@ var methods = {};
           //document.getElementById('local-video').src = URL.createObjectURL(stream);
           document.getElementById('local-video').srcObject = localStream;
           console.log("got stream")
-        ///
+        ///  
           room.data.sendMessage('got user media');
-          if (isInitiator) {
-          methods.maybeStart();
+          
+          if (peer.data.isInitiator) {
+            console.log("isInitiator")
+          peer.data.isChannelReady = true;
+          //methods.maybeStart();
           }
           stream.onended = function() {
             if (desktopSharing) {
@@ -84,14 +83,16 @@ var methods = {};
           } 
         }
       methods.maybeStart = function() {
-      console.log('>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
-      if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
+      console.log('>>>>>>> maybeStart() ', peer.data.isStarted, localStream, peer.data.isChannelReady);
+      if (!peer.data.isStarted && typeof localStream !== 'undefined' && peer.data.isChannelReady) {
         console.log('>>>>>> creating peer connection');
         peer.data.createPeerConnection();
+        pc = peer.data.pc;
+        console.log(pc)
         pc.addStream(localStream);
-        isStarted = true;
-        console.log('isInitiator', isInitiator);
-        if (isInitiator) {
+        peer.data.isStarted = true;
+        console.log('isInitiator', peer.data.isInitiator);
+        if (peer.data.isInitiator) {
           peer.data.doCall();
         }
       }

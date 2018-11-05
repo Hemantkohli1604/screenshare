@@ -58,7 +58,7 @@ document.getElementById('sharefinal').addEventListener('click', function(e) {
 });
 
 document.getElementById('joinsession').addEventListener('click', function(e) {
-  console.log('>>>>>> creating peer connection');
+  console.log('>>>>>> creating peer connection'); 
     peer.data.createPeerConnection();
-    var isStarted = true;
+    peer.data.isStarted = true;    
 });

@@ -4,9 +4,8 @@ const electron = require('electron')
 const {remote} = electron
 const ipc = electron.ipcRenderer
 const {desktopCapturer}  = require('electron')
-var isChannelReady = false;
-var isInitiator = false;
-var isStarted = false;
+var room = require('./room.js')
+
 var localStream;
 var pc;
 var remoteStream;
@@ -14,12 +13,31 @@ var remoteStream;
 let desktopSharing;
 var methods = {}; 
 
-    methods.createPeerConnection = function() {
+var sdpConstraints = {
+  offerToReceiveAudio: true,
+  offerToReceiveVideo: true
+};
+
+var pcConfig = {
+  'iceServers': [{
+    'urls': 'stun:stun.l.google.com:19302'
+  }]
+};
+
+ var localVideo = document.querySelector('#local-video');
+ var remoteVideo = document.querySelector('#remote-video');
+
+ methods.isChannelReady = false;
+ methods.isInitiator = false;
+ methods.isStarted = false;
+
+    methods.createPeerConnection = function(Started) {
       try {
-        pc = new RTCPeerConnection(null);
-        pc.onicecandidate = handleIceCandidate;
-        pc.onaddstream = handleRemoteStreamAdded;
-        pc.onremovestream = handleRemoteStreamRemoved;
+        methods.pc = new RTCPeerConnection(null);
+        methods.pc.onicecandidate = handleIceCandidate;
+        methods.pc.onaddstream = handleRemoteStreamAdded;
+        methods.pc.onremovestream = handleRemoteStreamRemoved;
+        
         console.log('Created RTCPeerConnnection');
       } catch (e) {
         console.log('Failed to create PeerConnection, exception: ' + e.message);
@@ -29,6 +47,7 @@ var methods = {};
     }
     
     function handleIceCandidate(event) {
+      console.log("in ice")
       console.log('icecandidate event: ', event);
       if (event.candidate) {
         room.data.sendMessage({
@@ -48,25 +67,26 @@ var methods = {};
     
     methods.doCall = function() {
       console.log('Sending offer to peer');
-      pc.createOffer(setLocalAndSendMessage, handleCreateOfferError);
+      methods.pc.createOffer(setLocalAndSendMessage,handleCreateOfferError);
     }
     
     methods.doAnswer = function() {
       console.log('Sending answer to peer.');
-      pc.createAnswer().then(
+      console.log(methods.pc)
+      methods.pc.createAnswer().then(
         setLocalAndSendMessage,
         onCreateSessionDescriptionError
       );
     }
     
-    methods.setLocalAndSendMessage = function(sessionDescription) {
-      pc.setLocalDescription(sessionDescription);
+    function setLocalAndSendMessage(sessionDescription) {
+      methods.pc.setLocalDescription(sessionDescription);
       console.log('setLocalAndSendMessage sending message', sessionDescription);
       room.data.sendMessage(sessionDescription);
     }
     
-    methods.onCreateSessionDescriptionError = function(error) {
-      trace('Failed to create session description: ' + error.toString());
+    function onCreateSessionDescriptionError(error) {
+      console.log('Failed to create session description: ' + error.toString());
     }
     
     methods.requestTurn = function(turnURL) {
@@ -117,12 +137,12 @@ var methods = {};
     methods.handleRemoteHangup = function() {
       console.log('Session terminated.');
       methods.stop();
-      isInitiator = false;
+      methods.isInitiator = false;
     }
     
     methods.stop = function() {
-      isStarted = false;
-      pc.close();
+      methods.isStarted = false;
+      methods.pc.close();
       pc = null;
     }
 

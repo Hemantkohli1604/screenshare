@@ -4,9 +4,7 @@ const electron = require('electron')
 const {remote} = electron
 const ipc = electron.ipcRenderer
 const {desktopCapturer}  = require('electron')
-var isChannelReady = false;
-var isInitiator = false;
-var isStarted = false;
+var peer = require('./peer.js')
 var localStream;
 var pc;
 var remoteStream;
@@ -17,8 +15,8 @@ let desktopSharing;
 var methods = {}; 
   methods.createRoom = function(room){
     console.log("room")
-  isInitiator = true;
-  methods.getMedia(room,isInitiator)
+  peer.data.isInitiator = true;
+  methods.getMedia(room,peer.data.isInitiator)
   }
 
   methods.getMedia = function(room,isInitiator){
@@ -29,7 +27,7 @@ var methods = {};
   
     socket.on('created', function(room) {
     console.log('Created room ' + room);
-    isInitiator = true;
+    peer.data.isInitiator = true;
     });
   
     socket.on('full', function(room) {
@@ -40,20 +38,20 @@ var methods = {};
     socket.on('join', function (room){
     console.log('Another peer made a request to join room ' + room);
     console.log('This peer is the initiator of room ' + room + '!');
-    isChannelReady = true;
+    peer.data.isChannelReady = true;
     });
   
     socket.on('joined', function(room) {
     console.log('joined: ' + room);
-    isChannelReady = true;
+    peer.data.isChannelReady = true;
     });
   
     socket.on('log', function(array) {
     console.log.apply(console, array);
-    });
-  
+    }); 
     }  
-  // This client receives a message
+  
+    // This client receives a message
     methods.sendMessage = function(message) {
     console.log('Client sending message: ', message);
     socket.emit('message', message);
