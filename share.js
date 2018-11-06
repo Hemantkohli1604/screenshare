@@ -8,7 +8,6 @@ const {remote} = electron
 const ipc = electron.ipcRenderer
 const {desktopCapturer}  = require('electron')
 var localStream;
-var pc;
 var remoteStream;
 
 
@@ -87,9 +86,8 @@ var methods = {};
       if (!peer.data.isStarted && typeof localStream !== 'undefined' && peer.data.isChannelReady) {
         console.log('>>>>>> creating peer connection');
         peer.data.createPeerConnection();
-        pc = peer.data.pc;
-        console.log(pc)
-        pc.addStream(localStream);
+        console.log("share:" + peer.data.pc)
+        peer.data.pc.addStream(localStream);
         peer.data.isStarted = true;
         console.log('isInitiator', peer.data.isInitiator);
         if (peer.data.isInitiator) {
