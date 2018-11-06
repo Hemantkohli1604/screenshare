@@ -53,7 +53,7 @@ if (message === 'got user media') {
 });
 
  // var localVideo = document.querySelector('#local-video');
- // var remoteVideo = document.querySelector('#remote-video');
+ var remoteVideo = document.querySelector('#remote-video');
   window.onbeforeunload = function() {
     room.data.sendMessage('bye');
   };
@@ -76,7 +76,7 @@ function mouseHandler(event) {
   var x = ((event.clientX - rect.left) * scaleX + 0.5)|0;
   var y = ((event.clientY - rect.top ) * scaleY + 0.5)|0;
 
- sendMessage ({type: 'mousemove', 'message': { x, y}},)
+ room.data.sendMessage ({type: 'mousemove', 'message': { x, y}},)
  //socket.emit('mousemove', {id: event.target,'message': {x,y}}); 
  //sendMessage({type: 'mousemove',  {'X': x  'Y': y }); 
   console.log ("x:" + x )
