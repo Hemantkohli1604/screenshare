@@ -57,3 +57,36 @@ if (message === 'got user media') {
   window.onbeforeunload = function() {
     room.data.sendMessage('bye');
   };
+
+function getElementCSSSize(el) {
+  var cs = getComputedStyle(el);
+  var w = parseInt(cs.getPropertyValue("width"), 10);
+  var h = parseInt(cs.getPropertyValue("height"), 10);
+  return {width: w, height: h}
+}
+
+function mouseHandler(event) {
+  console.log('In Move')
+  var size = getElementCSSSize(this);
+  var scaleX = this.videoWidth / size.width;
+  var scaleY = this.videoHeight / size.height;
+  console.log(scaleX)
+
+  var rect = this.getBoundingClientRect();  // absolute position of element
+  var x = ((event.clientX - rect.left) * scaleX + 0.5)|0;
+  var y = ((event.clientY - rect.top ) * scaleY + 0.5)|0;
+
+ sendMessage ({type: 'mousemove', 'message': { x, y}},)
+ //socket.emit('mousemove', {id: event.target,'message': {x,y}}); 
+ //sendMessage({type: 'mousemove',  {'X': x  'Y': y }); 
+  console.log ("x:" + x )
+  console.log ("y" + y)
+  //info.innerHTML = "x: " + x + " y: " + y;
+  //initial.innerHTML = "(video: " + this.videoWidth + " x " + this.videoHeight + ")";
+}
+
+remoteVideo.addEventListener("mousemove", mouseHandler);
+
+socket.on('mousemove', function (data) {
+    	console.log( "receives" + data)
+	});
