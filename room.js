@@ -9,7 +9,7 @@ var localStream;
 var pc;
 var remoteStream;
 
-var socket = io.connect('http://localhost:8080');
+var socket = io.connect('http://172.16.2.133:8080');
 
 let desktopSharing;
 var methods = {}; 

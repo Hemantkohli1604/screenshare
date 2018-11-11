@@ -23,7 +23,7 @@ const mainMenuTemplate = [{label:'Electron',
 const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 Menu.setApplicationMenu(mainMenu);
 
-var socket = io.connect('http://localhost:8080');
+var socket = io.connect('http://172.16.2.133:8080');
 
 // Set up audio and video regardless of what devices are present.
 socket.on('message', function(message) {

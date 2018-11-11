@@ -1,1 +1,4 @@
-saved_recordings/*
+saved_recordings/
+node_modules/
+build/
+dist/

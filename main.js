@@ -18,7 +18,7 @@ app.on('ready',function(){
 		protocol: 'file:',
 		slashes: true
 	}));
-	mainWindow.openDevTools()
+	//mainWindow.openDevTools()
 
 	prefWindow = new BrowserWindow({width: 512,hieght: 325,backgroundColor: '#3D637C',show: false,parent: mainWindow,modal: true});
 	prefWindow.loadURL(url.format({
