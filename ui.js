@@ -4,7 +4,7 @@ var fxn = require('./view.js');
 var room = require('./room.js');
 var share = require('./share.js');
 var peer = require('./peer.js');
-const {desktopCapturer}  = require('electron')
+//const {desktopCapturer}  = require('electron')
 
 $(document).ready(function (e) {
     $('button#sharescreen').hide();
